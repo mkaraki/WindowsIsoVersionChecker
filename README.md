@@ -1,22 +1,22 @@
 # Windows ISO Version Checker
 
-## Requirements
-
-- dotnet 6.0 SDK
-
 ## Usage
+
+### GUI
+
+Open `WindowsIsoVersionChecker.GUI.exe`
+
+### CLI
 
 Check iso file:
 ```
-dotnet run image.iso
+WindowsIsoVersionChecker.exe image.iso
 ```
 
 Check DVD:
 ```
-dotnet run D:\
+WindowsIsoVersionChecker.exe D:\
 ```
-
-You have to run in `WindowsIsoVersionChecker` directory.
 
 ## Supported Image
 
