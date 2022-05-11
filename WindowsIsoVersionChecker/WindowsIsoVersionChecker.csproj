@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
