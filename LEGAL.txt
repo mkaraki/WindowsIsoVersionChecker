@@ -1,7 +1,7 @@
 DiscUtils (https://github.com/DiscUtils/DiscUtils) by Kenneth Bell, Quamotion
 
 Used in
-- WindowsIsoVersionChecker/Program.cs
+- WindowsIsoVersionChecker/Extractor.cs
 
 MIT License
 
@@ -10,7 +10,7 @@ MIT License
 SevenZipExtractor (https://github.com/adoconnection/SevenZipExtractor) by Alexander Selishchev
 
 Used in
-- WindowsIsoVersionChecker/Program.cs
+- WindowsIsoVersionChecker/Extractor.cs
 
 MIT License
 
