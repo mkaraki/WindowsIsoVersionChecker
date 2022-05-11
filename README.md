@@ -1,4 +1,4 @@
-# WindowsIsoVersionChecker
+# Windows ISO Version Checker
 
 ## Requirements
 
