@@ -1,0 +1,6 @@
+DiscUtils (https://github.com/DiscUtils/DiscUtils) by Kenneth Bell, Quamotion
+
+Used in
+- WindowsIsoVersionChecker/Program.cs
+
+MIT License
