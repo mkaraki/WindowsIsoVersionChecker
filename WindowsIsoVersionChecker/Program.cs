@@ -21,6 +21,19 @@ if (File.Exists(args[0]))
         Environment.Exit(2);
     }
 }
+else if (Directory.Exists(args[0]))
+{
+    Console.WriteLine($"Directory:\t{args[0]}");
+    try
+    {
+        extractor.ExtractFromDirectory(args[0]);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine(ex.ToString());
+        Environment.Exit(2);
+    }
+}
 else
 {
     Console.Error.WriteLine("No file/directory found.");

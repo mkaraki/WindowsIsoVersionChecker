@@ -13,7 +13,6 @@ namespace WindowsIsoVersionChecker
             using FileStream iso = File.Open(isoPath, FileMode.Open, FileAccess.Read);
 
             UdfReader cd = new(iso);
-            string useImage = string.Empty;
             string usingSources = "sources\\";
 
             if (!cd.DirectoryExists("sources") && (cd.DirectoryExists("x64") || cd.DirectoryExists("x86")))
@@ -28,6 +27,7 @@ namespace WindowsIsoVersionChecker
                 Architectures = archs.ToArray();
             }
 
+            string useImage;
             if (cd.FileExists(usingSources + "install.wim"))
                 useImage = usingSources + "install.wim";
             else if (cd.FileExists(usingSources + "install.esd"))
@@ -36,6 +36,34 @@ namespace WindowsIsoVersionChecker
                 throw new Exception("No supported image found");
 
             using (var image = cd.OpenFile(useImage, FileMode.Open))
+                ExtractFromWim(image);
+        }
+
+        public void ExtractFromDirectory(string dir)
+        { 
+            string usingSources = Path.Combine(dir, "sources\\");
+
+            if (!Directory.Exists(Path.Combine(dir, "sources")) && (Directory.Exists(Path.Combine(dir, "x64")) || Directory.Exists(Path.Combine(dir, "x86"))))
+            {
+                usingSources = Path.Combine(dir, "x64\\sources\\");
+
+                List<string> archs = new();
+                if (Directory.Exists(Path.Combine(dir, "x64")))
+                    archs.Add("x64");
+                else if (Directory.Exists(Path.Combine(dir, "x86")))
+                    archs.Add("x86");
+                Architectures = archs.ToArray();
+            }
+
+            string useImage;
+            if (File.Exists(usingSources + "install.wim"))
+                useImage = usingSources + "install.wim";
+            else if (File.Exists(usingSources + "install.esd"))
+                useImage = usingSources + "install.esd";
+            else
+                throw new Exception("No supported image found");
+
+            using (var image = File.Open(useImage, FileMode.Open, FileAccess.Read))
                 ExtractFromWim(image);
         }
 
