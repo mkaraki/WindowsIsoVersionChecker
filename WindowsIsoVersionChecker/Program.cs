@@ -1,7 +1,6 @@
-﻿using DiscUtils.Iso9660;
-using DiscUtils.Wim;
-using DiscUtils.Registry;
+﻿using DiscUtils.Registry;
 using DiscUtils.Udf;
+using SevenZipExtractor;
 
 const string hiveFilePath = @"Windows\System32\config\SOFTWARE";
 
@@ -11,6 +10,7 @@ if (args.Length < 1 || !File.Exists(args[0]))
     Environment.Exit(1);
 }
 
+Console.WriteLine($"ISO Image:\t{args[0]}");
 using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
 {
     UdfReader cd = new(iso);
@@ -32,26 +32,33 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
         Environment.Exit(2);
     }
 
-    using (var image = cd.OpenFile(useImage, FileMode.Open))
-    {
-        var wimFile = image;
-        WimFile wimContainer = new WimFile(wimFile);
-        if (wimContainer.ImageCount < 1)
-        {
-            Console.Error.WriteLine("No image to open");
-            Environment.Exit(3);
-        }
-        var wimImage = wimContainer.GetImage(0);
-        Console.WriteLine($"Target Image:\t0");
+    Console.WriteLine($"Wim Image:\t{useImage}");
 
-        if (!wimImage.Exists(hiveFilePath))
+    using (var image = cd.OpenFile(useImage, FileMode.Open))
+    using (var wimArchive = new ArchiveFile(image, SevenZipFormat.Wim))
+    {
+        string wimPrefix = string.Empty;
+        if (!wimArchive.Entries.Any(v => v.FileName == "Windows") && wimArchive.Entries.Any(v => v.FileName == "1"))
+        {
+            wimPrefix = "1\\";
+        }
+
+        if (!wimArchive.Entries.Any(v => v.FileName == wimPrefix + hiveFilePath))
         {
             Console.Error.WriteLine("No SOFTWARE hive found.");
             Environment.Exit(4);
         }
 
-        using (var hiveFile = wimImage.OpenFile(hiveFilePath, FileMode.Open))
-        using (var hive = new RegistryHive(hiveFile))
+        Console.WriteLine($"Hive Path:\t{wimPrefix}");
+
+        var temp_hive_path = Path.GetTempFileName();
+
+        wimArchive.Entries.First(v => v.FileName == wimPrefix + hiveFilePath).Extract(temp_hive_path);
+
+        Console.WriteLine($"Temp Hive Path:\t{temp_hive_path}");
+
+        using (FileStream hiveFileStream = File.Open(temp_hive_path, FileMode.Open, FileAccess.Read))
+        using (var hive = new RegistryHive(hiveFileStream))
         {
             var rh_Microsoft_WinNT_CurVer = hive.Root.OpenSubKey("Microsoft").OpenSubKey("Windows NT").OpenSubKey("CurrentVersion");
             var dispver = (string)rh_Microsoft_WinNT_CurVer.GetValue("DisplayVersion");
@@ -61,5 +68,7 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
             Console.WriteLine($"Version:\t{dispver}");
             Console.WriteLine($"Build:\t{buildver}");
         }
+
+        File.Delete(temp_hive_path);
     }
 }

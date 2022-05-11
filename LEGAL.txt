@@ -4,3 +4,18 @@ Used in
 - WindowsIsoVersionChecker/Program.cs
 
 MIT License
+
+---
+
+SevenZipExtractor (https://github.com/adoconnection/SevenZipExtractor) by Alexander Selishchev
+
+Used in
+- WindowsIsoVersionChecker/Program.cs
+
+MIT License
+
+---
+
+Build artifact contains 7-Zip binary, by Igor Pavlov
+
+License: https://www.7-zip.org/license.txt
