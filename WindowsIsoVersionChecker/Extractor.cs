@@ -4,7 +4,7 @@ using SevenZipExtractor;
 
 namespace WindowsIsoVersionChecker
 {
-    internal class Extractor
+    public class Extractor
     {
         private static string HIVEFILEPATH = @"Windows\System32\config\SOFTWARE";
 
