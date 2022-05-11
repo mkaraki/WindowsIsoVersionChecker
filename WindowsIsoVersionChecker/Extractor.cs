@@ -84,10 +84,15 @@ namespace WindowsIsoVersionChecker
                 var buildver = (string)rh_Microsoft_WinNT_CurVer.GetValue("CurrentBuild");
                 var buildlabex = (string)rh_Microsoft_WinNT_CurVer.GetValue("BuildLabEx");
 
-                if (dispver == null && prodname.StartsWith("Windows 10") && int.TryParse(buildver, out int buildver_int) && buildver_int < 10586)
+                bool buildver_tparse = int.TryParse(buildver, out int buildver_int);
+
+                if (dispver == null && prodname.StartsWith("Windows 10") && buildver_tparse && buildver_int < 10586)
                 {
                     dispver = "1507 (Initial Release)";
                 }
+
+                if (buildver_tparse && buildver_int >= 22000 && prodname.StartsWith("Windows 10"))
+                    prodname = $"Windows 11 ({prodname})";
 
                 ProductName = prodname;
                 ProductVersion = dispver;
