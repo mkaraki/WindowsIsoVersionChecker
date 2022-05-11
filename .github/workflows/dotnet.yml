@@ -21,3 +21,19 @@ jobs:
       run: dotnet restore WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
     - name: Build
       run: dotnet build --no-restore WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
+
+    - name: Make self contained package (x64)
+      run: dotnet publish --self-contained true --runtime win-x64 -o publish-x64 --no-build WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
+      
+    - name: Make self contained package (x86)
+      run: dotnet publish --self-contained true --runtime win-x64 -o publish-x86 --no-build WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
+      
+    - uses: actions/upload-artifact@v3
+      with:
+        name: selfcontained-x64
+        path: publish-x64
+        
+    - uses: actions/upload-artifact@v3
+      with:
+        name: selfcontained-x86
+        path: publish-x86
