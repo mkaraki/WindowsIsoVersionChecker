@@ -16,6 +16,7 @@ You have to run in `WindowsIsoVersionChecker` directory.
 
 We tested:
 - Windows 7 x64
+- Windows 10 1607 x64
 - Windows 10 20H1 x64, x86
 - Windows 10 21H1 x64, x86
 
