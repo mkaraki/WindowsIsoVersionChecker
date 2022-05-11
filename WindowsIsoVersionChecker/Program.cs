@@ -1,6 +1,5 @@
 ﻿using DiscUtils.Iso9660;
 using DiscUtils.Wim;
-//using Registry;
 using DiscUtils.Registry;
 using DiscUtils.Udf;
 
@@ -16,11 +15,17 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
 {
     UdfReader cd = new(iso);
     string useImage = string.Empty;
+    string usingSources = "sources\\";
 
-    if (cd.Exists("sources\\install.wim"))
-        useImage = "sources\\install.wim";
-    else if (cd.Exists("/sources\\install.esd"))
-        useImage = "sources\\install.esd";
+    if (!cd.DirectoryExists("sources") && (cd.DirectoryExists("x64") || cd.DirectoryExists("x86")))
+    {
+        usingSources = "x64\\sources\\";
+    }
+
+    if (cd.FileExists(usingSources + "install.wim"))
+        useImage = usingSources + "install.wim";
+    else if (cd.FileExists(usingSources + "install.esd"))
+        useImage = usingSources + "install.esd";
     else
     {
         Console.Error.WriteLine("No supported image file found");
@@ -36,8 +41,8 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
             Console.Error.WriteLine("No image to open");
             Environment.Exit(3);
         }
-        var wimImage = wimContainer.GetImage(1);
-        Console.WriteLine($"Target Image:\t1");
+        var wimImage = wimContainer.GetImage(0);
+        Console.WriteLine($"Target Image:\t0");
 
         if (!wimImage.Exists(hiveFilePath))
         {
