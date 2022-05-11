@@ -26,5 +26,3 @@ These images are not supported
 
 These images are unable to extract. It's bug.
 - Windows 11, Shows like `Windows 10`
-
-Version will empty string in initial release of Windows 10 (also known as 1507)
