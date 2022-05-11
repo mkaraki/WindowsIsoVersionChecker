@@ -8,38 +8,29 @@ if (args.Length < 1)
     Environment.Exit(1);
 }
 
-if (File.Exists(args[0]))
+try
 {
-    Console.WriteLine($"ISO Image:\t{args[0]}");
-    try
+    if (File.Exists(args[0]))
     {
+        Console.WriteLine($"ISO Image:\t{args[0]}");
         extractor.ExtractFromIso(args[0]);
     }
-    catch (Exception ex)
+    else if (Directory.Exists(args[0]))
     {
-        Console.Error.WriteLine(ex.ToString());
-        Environment.Exit(2);
-    }
-}
-else if (Directory.Exists(args[0]))
-{
-    Console.WriteLine($"Directory:\t{args[0]}");
-    try
-    {
+        Console.WriteLine($"Directory:\t{args[0]}");
         extractor.ExtractFromDirectory(args[0]);
     }
-    catch (Exception ex)
+    else
     {
-        Console.Error.WriteLine(ex.ToString());
-        Environment.Exit(2);
+        Console.Error.WriteLine("No file/directory found.");
+        Environment.Exit(1);
     }
 }
-else
+catch (Exception ex)
 {
-    Console.Error.WriteLine("No file/directory found.");
-    Environment.Exit(1);
+    Console.Error.WriteLine(ex.Message);
+    Environment.Exit(2);
 }
-
 
 // Results
 
@@ -49,7 +40,7 @@ if (extractor.ProductName != null)
 if (extractor.Architectures.Length > 0)
 {
     Console.Write("Architecture:\t");
-    foreach(var i in extractor.Architectures)
+    foreach (var i in extractor.Architectures)
         Console.Write(i + ' ');
     Console.WriteLine();
 }
