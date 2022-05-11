@@ -21,10 +21,17 @@ if (File.Exists(args[0]))
         Environment.Exit(2);
     }
 }
+else
+{
+    Console.Error.WriteLine("No file/directory found.");
+    Environment.Exit(1);
+}
+
+
+// Results
 
 if (extractor.ProductName != null)
     Console.WriteLine($"Product Name:\t{extractor.ProductName}");
-
 
 if (extractor.Architectures.Length > 0)
 {
