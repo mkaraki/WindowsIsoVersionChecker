@@ -22,9 +22,7 @@ We tested:
 - Windows 10 1607 x64
 - Windows 10 20H1 x64, x86
 - Windows 10 21H1 x64, x86
+- Windows 11 21H2
 
-These images are not supported
+These images are not supported:
 - Windows XP or older
-
-These images are unable to extract. It's bug.
-- Windows 11, Shows like `Windows 10`
