@@ -6,8 +6,14 @@
 
 ## Usage
 
+Check iso file:
 ```
 dotnet run image.iso
+```
+
+Check DVD:
+```
+dotnet run D:\
 ```
 
 You have to run in `WindowsIsoVersionChecker` directory.

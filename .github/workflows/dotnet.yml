@@ -20,4 +20,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
     - name: Build
-      run: dotnet build --no-restore WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
+      run: dotnet build --no-restore --configuration Release WindowsIsoVersionChecker/WindowsIsoVersionChecker.csproj
