@@ -70,12 +70,18 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
         {
             var rh_Microsoft_WinNT_CurVer = hive.Root.OpenSubKey("Microsoft").OpenSubKey("Windows NT").OpenSubKey("CurrentVersion");
             var prodname = (string)rh_Microsoft_WinNT_CurVer.GetValue("ProductName");
-            Console.WriteLine($"Product Name:\t{prodname}");
             var dispver = (string)(rh_Microsoft_WinNT_CurVer.GetValue("DisplayVersion") ?? rh_Microsoft_WinNT_CurVer.GetValue("ReleaseId") ?? rh_Microsoft_WinNT_CurVer.GetValue("CSDVersion"));
-            Console.WriteLine($"Version:\t{dispver}");
             var buildver = (string)rh_Microsoft_WinNT_CurVer.GetValue("CurrentBuild");
-            Console.WriteLine($"Build:\t{buildver}");
             var buildlabex = (string)rh_Microsoft_WinNT_CurVer.GetValue("BuildLabEx");
+
+            if (prodname.StartsWith("Windows 10") && int.TryParse(buildver, out int buildver_int) && buildver_int < 10586)
+            {
+                dispver = "1507 (Initial Release)";
+            }
+
+            Console.WriteLine($"Product Name:\t{prodname}");
+            Console.WriteLine($"Version:\t{dispver}");
+            Console.WriteLine($"Build:\t{buildver}");
             Console.WriteLine($"Build Info:\t{buildlabex}");
         }
 
