@@ -17,9 +17,12 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
     string useImage = string.Empty;
     string usingSources = "sources\\";
 
+    bool bothArch = false;
+
     if (!cd.DirectoryExists("sources") && (cd.DirectoryExists("x64") || cd.DirectoryExists("x86")))
     {
         usingSources = "x64\\sources\\";
+        bothArch = true;
     }
 
     if (cd.FileExists(usingSources + "install.wim"))
@@ -49,7 +52,7 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
             Environment.Exit(4);
         }
 
-        Console.WriteLine($"Hive Path:\t{wimPrefix}");
+        Console.WriteLine($"Hive Path:\t{wimPrefix + hiveFilePath}");
 
         var temp_hive_path = Path.GetTempFileName();
 
@@ -57,11 +60,16 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
 
         Console.WriteLine($"Temp Hive Path:\t{temp_hive_path}");
 
+        if (bothArch)
+            Console.WriteLine("Architecture:\tx86 and x64");
+        else
+            Console.WriteLine("Architecture:\t" + (wimArchive.Entries.Any(v => v.FileName == wimPrefix + "Program Files (x86)") ? "x64" : "x86"));
+
         using (FileStream hiveFileStream = File.Open(temp_hive_path, FileMode.Open, FileAccess.Read))
         using (var hive = new RegistryHive(hiveFileStream))
         {
             var rh_Microsoft_WinNT_CurVer = hive.Root.OpenSubKey("Microsoft").OpenSubKey("Windows NT").OpenSubKey("CurrentVersion");
-            var dispver = (string)rh_Microsoft_WinNT_CurVer.GetValue("DisplayVersion");
+            var dispver = (string)(rh_Microsoft_WinNT_CurVer.GetValue("DisplayVersion") ?? rh_Microsoft_WinNT_CurVer.GetValue("ReleaseId"));
             var buildver = (string)rh_Microsoft_WinNT_CurVer.GetValue("CurrentBuild");
             var prodname = (string)rh_Microsoft_WinNT_CurVer.GetValue("ProductName");
             Console.WriteLine($"Product Name:\t{prodname}");
