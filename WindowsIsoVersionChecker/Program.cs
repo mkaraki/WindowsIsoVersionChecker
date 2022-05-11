@@ -46,7 +46,7 @@ using (FileStream iso = File.Open(args[0], FileMode.Open, FileAccess.Read))
 
         if (!wimImage.Exists(hiveFilePath))
         {
-            Console.Error.WriteLine("No SYSTEM hive.");
+            Console.Error.WriteLine("No SOFTWARE hive found.");
             Environment.Exit(4);
         }
 
