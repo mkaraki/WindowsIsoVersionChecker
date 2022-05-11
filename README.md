@@ -23,5 +23,5 @@ These images are not supported
 - Windows XP or older
 
 These images are unable to extract. It's bug.
-- Windows 10 20H1 or older, Unable to show version like `20H1`
+- Windows 10, older than 1607 unable to show version
 - Windows 11, Shows like `Windows 10`
